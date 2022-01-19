@@ -14,7 +14,7 @@ public class FilmDto extends BaseDto {
     private Long id;
     private String title;
     private String poster;
-    private String genre;
+    private List<CategoryDto> genre;
     private Integer year;
     private String shortDescription;
     private String description;

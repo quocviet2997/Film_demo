@@ -21,7 +21,7 @@
                 <caption>
                     <h1 class="text-center">Film Form</h2>
                 </caption>
-                <form id="formSubmit">
+                <form id="formSubmit" enctype="multipart/form-data">
                     <input type="hidden" name="id" value="<c:out value='${id}' />" id="id"/>
                     <fieldset class="form-group">
                         <label>Title</label> 
@@ -30,13 +30,10 @@
 
                     <fieldset class="form-group">
                         <label>Poster</label> 
-                        <input type="text" class="form-control" name="poster" id="poster" required="required">
+                        <input type="file" class="form-control" name="poster" id="poster" required="required">
                     </fieldset>
-
-                    <fieldset class="form-group">
-                        <label>Genre</label> 
-                        <input type="text" class="form-control" name="genre" id="genre" required="required">
-                    </fieldset>
+                    <div class="container" style="text-align: center;" id="imgContainer">
+                    </div>
 
                     <fieldset class="form-group">
                         <label>Year</label>
@@ -71,10 +68,14 @@
         }
         $('#btnAddOrUpdateNew').click(function (e) {
             e.preventDefault();
-            var data = {};
+            var data = new FormData();
+            var image = document.getElementById('poster').files;
+            if(image!= null && image.length>0){
+                data.append('file', image[0]);
+            }
             var formData = $('#formSubmit').serializeArray();
             $.each(formData, function (i, v) {
-                data[""+v.name+""] = v.value;
+                data.append(v.name, v.value);
             });
             var id = $('#id').val();
             if (id == "" || id == null || typeof id === 'undefined') {
@@ -87,9 +88,10 @@
             $.ajax({
                 url: '${AddUrl}',
                 method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(data),
-                dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: data,
                 success: function (result) {
                     window.location.href = "<c:url value='/admin-api-film'/>";
                 },
@@ -104,9 +106,10 @@
             $.ajax({
                 url: '${NewURL}/'+$('#id').val(),
                 method: 'PUT',
-                contentType: 'application/json',
-                data: JSON.stringify(data),
-                dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: data,
                 success: function (result) {
                     window.location.href = "<c:url value='/admin-api-film'/>";
                 },
@@ -116,6 +119,7 @@
                 }
             });
         }
+
         function filmInfo(id) {
              $.ajax({
                 url: '${NewURL}/'+id,
@@ -124,8 +128,7 @@
                 dataType: 'json',
                 success: function (result) {
                     $('#title').val(result.data.title);
-                    $('#poster').val(result.data.poster);
-                    $('#genre').val(result.data.genre);
+                    $('#imgContainer').append(`<img class="card-img-top" style="width:80%; height:80%;" src="<c:url value='/resources/images/`+result.data.poster+`' />" alt="`+result.data.title+`">`);
                     $('#year').val(result.data.year);
                     $('#shortDescription').val(result.data.shortDescription);
                     $('#description').val(result.data.description);

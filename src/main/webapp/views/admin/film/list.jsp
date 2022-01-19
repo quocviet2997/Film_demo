@@ -27,7 +27,6 @@
 					<th class="text-center">ID</th>
 					<th class="text-center">Title</th>
 					<th class="text-center">Poster</th>
-					<th class="text-center">Genre</th>
 					<th class="text-center">Year</th>
 					<th class="text-center">ShortDescription</th>
 					<th class="text-center">Description</th>
@@ -69,8 +68,7 @@
 						= `<tr>
 							<td id="film_id">`+row.id+`</td>
 							<td>`+row.title+`</td>
-							<td>`+row.poster+`</td>
-							<td>`+row.genre+`</td>
+							<td><img class="card-img-top" style="width:250px; height:350px;" src="<c:url value='/resources/images/`+row.poster+`' />" alt="`+row.title+`"></td>
 							<td>`+row.year+`</td>
 							<td>`+row.shortDescription+`</td>
 							<td>`+row.description+`</td>

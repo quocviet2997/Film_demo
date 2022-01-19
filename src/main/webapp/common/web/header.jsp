@@ -12,6 +12,21 @@
         <li class="nav-item active">
           <a class="nav-link" href="<c:url value='/home'/>">Trang chủ</a>
         </li>
+        <li class="nav-item active dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Thể loại
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink" id="filmNavItem">
+          </ul>
+        </li>
+        <li>
+          <div class="input-group rounded">
+            <input type="search" class="form-control rounded" placeholder="Search" id="searchInfo"/>
+            <span class="input-group-text border-0" id="search">
+              <i class="fas fa-search"></i>
+            </span>
+          </div>
+        </li>
       </ul>
     </div>
   </div>

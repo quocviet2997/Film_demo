@@ -3,6 +3,8 @@ package com.webfilminfo.demo.converter.impl;
 import com.webfilminfo.demo.converter.ICommentConverter;
 import com.webfilminfo.demo.dto.CommentDto;
 import com.webfilminfo.demo.entity.CommentEntity;
+import com.webfilminfo.demo.entity.FilmEntity;
+import com.webfilminfo.demo.entity.UserEntity;
 import com.webfilminfo.demo.repository.CommentRepository;
 import com.webfilminfo.demo.repository.FilmRepository;
 import com.webfilminfo.demo.repository.UserRepository;
@@ -34,8 +36,12 @@ public class CommentConverter implements ICommentConverter {
         if(id != null){
             List<CommentEntity> commentChildren = commentRepository.findByReplyId(id);
             commentDto.setChildComments(entiListCommentToDto(commentChildren));
-            commentDto.setUserName(userRepository.findById(commentDto.getUserId()).orElse(null).getUserName());
-            commentDto.setFilmName(filmRepository.findById(commentDto.getFilmId()).orElse(null).getTitle());
+            UserEntity user = userRepository.findById(commentDto.getUserId()).orElse(null);
+            FilmEntity film = filmRepository.findById(commentDto.getFilmId()).orElse(null);
+            if(user != null)
+                commentDto.setUserName(user.getUserName());
+            if(film != null)
+                commentDto.setFilmName(film.getTitle());
         }
         return commentDto;
     }
@@ -58,7 +64,10 @@ public class CommentConverter implements ICommentConverter {
 
     @Override
     public CommentEntity dtoCommentToEntity(CommentEntity entity, CommentDto dto) {
-        entity.setComment(dto.getComment());
-        return entity;
+        CommentEntity newEntity = modelMapper.map(dto, CommentEntity.class);
+        //newEntity.setComment(dto.getComment());
+        newEntity.setCreateBy(entity.getCreateBy());
+        newEntity.setCreateDate(entity.getCreateDate());
+        return newEntity;
     }
 }

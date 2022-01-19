@@ -59,7 +59,12 @@
             $.each(formData, function (i, v) {
                 data[""+v.name+""] = v.value;
             });
-            register(data);
+            if(data.userName == "" || data.userName == null || typeof data.userName === 'undefined'
+                || data.password == "" || data.password == null || typeof data.password === 'undefined'){
+                $('#response').text("User or password is blank");
+            }else{
+                register(data);
+            }
         });
 
         function login(data) {

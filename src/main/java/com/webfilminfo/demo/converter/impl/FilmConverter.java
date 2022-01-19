@@ -1,9 +1,14 @@
 package com.webfilminfo.demo.converter.impl;
 
 import com.webfilminfo.demo.converter.IFilmConverter;
+import com.webfilminfo.demo.dto.CategoryDto;
 import com.webfilminfo.demo.dto.CommentDto;
 import com.webfilminfo.demo.dto.FilmDto;
+import com.webfilminfo.demo.entity.CategoryEntity;
+import com.webfilminfo.demo.entity.CategoryFilmEntity;
 import com.webfilminfo.demo.entity.FilmEntity;
+import com.webfilminfo.demo.repository.CategoryFilmRepository;
+import com.webfilminfo.demo.repository.CategoryRepository;
 import com.webfilminfo.demo.repository.CommentRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +25,34 @@ public class FilmConverter implements IFilmConverter {
     @Autowired
     private CommentRepository commentRepository;
 
+    @Autowired
+    private CategoryFilmRepository categoryFilmRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    private CategoryConverter categoryConverter = new CategoryConverter();
+
     @Override
     public FilmDto entiFilmToDto(FilmEntity entity) {
         if(entity == null)
             return null;
         FilmDto dto = modelMapper.map(entity,FilmDto.class);
+        List<CategoryFilmEntity> tempCategoryFilmEntity = categoryFilmRepository.findByFilmId(dto.getId());
+        if(tempCategoryFilmEntity.size()>0) {
+            List<CategoryDto> genres = new ArrayList<>();
+            for(CategoryFilmEntity categoryFilmEntity: tempCategoryFilmEntity){
+                Long filmId = categoryFilmEntity.getCategoryId();
+                CategoryEntity category = categoryRepository.findById(filmId).orElse(null);
+                CategoryDto genre = categoryConverter.entityCategoryToDto(category);
+                if (genre != null)
+                    genres.add(genre);
+            }
+            dto.setGenre(genres);
+        }
+        else{
+            dto.setGenre(null);
+        }
         return dto;
     }
 
@@ -32,6 +60,19 @@ public class FilmConverter implements IFilmConverter {
         if(entity == null)
             return null;
         FilmDto dto = modelMapper.map(entity,FilmDto.class);
+        List<CategoryFilmEntity> tempCategoryFilmEntity = categoryFilmRepository.findByFilmId(dto.getId());
+        if(tempCategoryFilmEntity.size()>0) {
+            List<CategoryDto> genres = new ArrayList<>();
+            for(CategoryFilmEntity categoryFilmEntity: tempCategoryFilmEntity){
+                CategoryDto genre = categoryConverter.entityCategoryToDto(categoryRepository.findById(categoryFilmEntity.getCategoryId()).orElse(null));
+                if (genre != null)
+                    genres.add(genre);
+            }
+            dto.setGenre(genres);
+        }
+        else{
+            dto.setGenre(null);
+        }
         dto.setComments(commentDtos);
         return dto;
     }

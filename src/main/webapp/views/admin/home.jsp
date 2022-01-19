@@ -24,5 +24,11 @@
   <%@ include file="/common/web/footer.jsp"%>
   <script type="text/javascript" src="<c:url value='/template/web/jquery/jquery.min.js'/>"></script>
   <script type="text/javascript" src="<c:url value='/template/web/bootstrap/js/bootstrap.bundle.min.js'/>"></script>
+  <script type="text/javascript" src="<c:url value='/template/common/loadUserInfo.js'/>"></script>
+  <script>
+    $(function() {
+      loadUserInfo();
+    });
+  </script>
 </body>
 </html>

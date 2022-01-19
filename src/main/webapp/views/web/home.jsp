@@ -2,29 +2,18 @@
     pageEncoding="UTF-8"%>
 <%@ include file="/common/taglib.jsp"%>
 <c:url var="APIurl" value="/api-film"/>
+<c:url var="Genreurl" value="/api-category"/>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Film demo</title>
-<link href="<c:url value='/template/web/bootstrap/css/bootstrap.min.css'/>" rel="stylesheet" type="text/css" media="all"/>
-<link href="<c:url value='/template/web/css/style.css'/>" rel="stylesheet" type="text/css" media="all"/>
+  <meta charset="UTF-8">
+  <title>Film demo</title>
+  <link href="<c:url value='/template/web/bootstrap/css/bootstrap.min.css'/>" rel="stylesheet" type="text/css" media="all"/>
+  <link href="<c:url value='/template/web/css/style.css'/>" rel="stylesheet" type="text/css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
 </head>
 <body onload="loadFilm()">
   <%@ include file="/common/web/header.jsp"%>
-	<div class="row">
-    <div class="col-lg-3">
-      <h1 class="my-4">Film Demo</h1>
-      <!--
-      <div class="list-group">
-        <a href="#" class="list-group-item">Category 1</a>
-        <a href="#" class="list-group-item">Category 2</a>
-        <a href="#" class="list-group-item">Category 3</a>
-      </div>-->
-    </div> 
-    <!-- /.col-lg-3 -->
-
-    <div class="col-lg-9">
       <div class="container">
         <div id="carouselExampleIndicators" class="carousel slide my-4 w-75" data-ride="carousel">
           <ol class="carousel-indicators">
@@ -67,11 +56,6 @@
           <input type="hidden" value="<c:out value='${limit}' />" id="limit" name="limit"/>
         </form>
       </div>
-      <!-- /.row -->
-    </div>
-    <!-- /.col-lg-9 -->
-  </div>
-  <!-- /.row -->
   <%@ include file="/common/web/footer.jsp"%>
   
   <script type="text/javascript" src="<c:url value='/template/web/jquery/jquery.min.js'/>"></script>
@@ -83,8 +67,14 @@
       var currentPage = $('#page').val();
       var limit = $('#limit').val();
       loadUserInfo();
+      showListGenre();
       showList(currentPage, limit);
     }
+
+    $('#search').click(function(){
+      var tempStr = "<c:url value='/home?searchStr='/>";
+      window.location.href= tempStr + $('#searchInfo').val();
+    })
 
     function showList(currentPage, limit) {
       $.ajax({
@@ -93,11 +83,12 @@
         method: "get",
         data: {page: currentPage, limit: limit},
         success: function (result) {
+          $('#rowsPage').empty(); 
           $.each(result.data, (index, row)  => {
-            const rowContent = `<div class="col-lg-6 col-md-6 mb-5">
+            const rowContent = `<div class="col-lg-3 col-md-6 mb-5">
                                   <a href="<c:url value='/`+row.id+`'/>">
                                     <div class="card h-100">
-                                      <img class="card-img-top" src="http://placehold.it/400x500" alt="`+row.poster+`">
+                                      <img class="card-img-top" src="<c:url value='/resources/images/`+row.poster+`' />" alt="`+row.title+`">
                                       <div class="card-body">
                                         <h4 class="card-title text-center">`+row.title+`</h4>
                                       </div>
@@ -106,6 +97,7 @@
                                 </div>`;
             $('#rowsPage').append(rowContent);
           });
+          $('#pagination').empty();
           var totalPages = result.totalPage;
           var visiblePages = 5;
           if(visiblePages > totalPages){
@@ -122,6 +114,24 @@
 								$('#formSubmit').submit();
               }
             }
+          });
+        },
+        error: function(error) {
+          alert("Something failed");
+        }
+      })
+    }
+
+    function showListGenre() {
+      $.ajax({
+        url: "${Genreurl}",
+        contentType: "application/json",
+        method: "get",
+        success: function (result) {
+          $('#filmNavItem').empty(); 
+          $.each(result.data, (index, row)  => {
+            const rowContent = `<li><a class="dropdown-item" href="<c:url value='/genre/`+row.id+`'/>">`+row.categoryName+`</a></li>`;
+            $('#filmNavItem').append(rowContent);
           });
         },
         error: function(error) {

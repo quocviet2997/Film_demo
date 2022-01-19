@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,6 +28,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private UserConverter userConverter;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDto findById(Long id) {
@@ -92,6 +96,7 @@ public class UserService implements IUserService {
         UserEntity entity = null;
         if(id == null){
             entity = userConverter.dtoUserToEntity(userDto);
+            entity.setPassword(passwordEncoder.encode(entity.getPassword()));
             UserEntity temp = userRepository.save(entity);
             return (entity==null)?
                     ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
@@ -133,19 +138,25 @@ public class UserService implements IUserService {
 
     @Override
     public ResponseEntity<ResponseObject> login(UserDto userDto) {
-        if((userDto.getUserName() == null) || (userDto.getPassword() == null))
+        if((userDto.getUserName() == null) || (userDto.getPassword() == null) || (userDto.getUserName().equals("")) || (userDto.getPassword().equals("")))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new ResponseObject("Failed", "Username or password is invalid", null)
             );
-        List<UserEntity> user = userRepository.findByUserNameAndPassword(userDto.getUserName(), userDto.getPassword());
-        if(user.size() == 0) {
+        List<UserEntity> user = userRepository.findByUserName(userDto.getUserName());
+        if(user.size() == 0)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("Failed", "User or password is mismatched", null)
+            );
+        if(passwordEncoder.matches(userDto.getPassword(), user.get(0).getPassword())){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("OK", "Login successful", user.get(0))
+            );
+        }
+        else{
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new ResponseObject("Failed", "User or password is mismatched", null)
             );
         }
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("OK", "Login successful", user.get(0))
-        );
     }
 
     @Override

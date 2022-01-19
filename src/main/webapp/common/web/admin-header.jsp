@@ -26,6 +26,14 @@
           <a class="nav-link" href='<c:url value="/admin-api-user"/>'>User
           </a>
         </li>
+        <li class="nav-item active">
+          <a class="nav-link" href='<c:url value="/admin-api-category"/>'>Category
+          </a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href='<c:url value="/admin-api-category-film"/>'>Category_Film
+          </a>
+        </li>
       </ul>
     </div>
   </div>

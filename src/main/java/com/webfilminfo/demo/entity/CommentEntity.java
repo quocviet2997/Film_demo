@@ -10,9 +10,9 @@ import java.util.List;
 @Table(name="comment")
 @Data
 public class CommentEntity extends BaseEntity {
-    @Column(name="filmId")
+    @Column(name="filmId", nullable = false)
     private Integer filmId;
-    @Column(name = "userId")
+    @Column(name = "userId", nullable = false)
     private Integer userId;
     @Column(name = "replyId")
     private Long replyId;

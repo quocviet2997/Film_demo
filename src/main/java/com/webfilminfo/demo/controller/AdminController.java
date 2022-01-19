@@ -81,4 +81,50 @@ public class AdminController {
     String insertComment(){
         return "views/admin/comment/form";
     }
+
+    @GetMapping("/admin-api-category")
+    String getListCategory(@RequestParam(name="page", required = false) Integer page,
+                          @RequestParam(name="limit", required = false) Integer limit, Model model){
+        if(page == null)
+            page = Paging.PAGE_DEFAULT;
+        if(limit == null)
+            limit = Paging.LIMIT_COMMENT;
+        model.addAttribute("page",page);
+        model.addAttribute("limit", limit);
+        return "views/admin/category/list";
+    }
+
+    @GetMapping("/admin-api-category/{id}")
+    String editCategory(@PathVariable Long id ,Model model){
+        model.addAttribute("id", id);
+        return "views/admin/category/form";
+    }
+
+    @GetMapping("/admin-api-category/new")
+    String insertCategory(){
+        return "views/admin/category/form";
+    }
+
+    @GetMapping("/admin-api-category-film")
+    String getListCategoryFilm(@RequestParam(name="page", required = false) Integer page,
+                          @RequestParam(name="limit", required = false) Integer limit, Model model){
+        if(page == null)
+            page = Paging.PAGE_DEFAULT;
+        if(limit == null)
+            limit = Paging.LIMIT_COMMENT;
+        model.addAttribute("page",page);
+        model.addAttribute("limit", limit);
+        return "views/admin/categoryFilm/list";
+    }
+
+    @GetMapping("/admin-api-category-film/{id}")
+    String editCategoryFilm(@PathVariable Long id ,Model model){
+        model.addAttribute("id", id);
+        return "views/admin/categoryFilm/form";
+    }
+
+    @GetMapping("/admin-api-category-film/new")
+    String insertCategoryFilm(){
+        return "views/admin/categoryFilm/form";
+    }
 }

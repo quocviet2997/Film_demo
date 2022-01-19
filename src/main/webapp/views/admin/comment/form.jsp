@@ -25,12 +25,12 @@
                     <input type="hidden" name="id" value="<c:out value='${id}' />" id="id"/>
                     <fieldset class="form-group">
                         <label>FilmId</label> 
-                        <input type="text" class="form-control" name="filmId" id="filmId" required="required">
+                        <input type="number" step="1" class="form-control" name="filmId" id="filmId" required="required">
                     </fieldset>
 
                     <fieldset class="form-group">
                         <label>UserId</label> 
-                        <input type="text" class="form-control" name="userId" id="userId" required="required">
+                        <input type="number" step="1" class="form-control" name="userId" id="userId" required="required">
                     </fieldset>
 
                     <fieldset class="form-group">

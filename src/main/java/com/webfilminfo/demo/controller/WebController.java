@@ -13,14 +13,33 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class WebController {
     @GetMapping(value = {"/home", ""})
     String getHome(@RequestParam(name="page", required = false) Integer page,
-                   @RequestParam(name="limit", required = false) Integer limit, Model model){
+                   @RequestParam(name="limit", required = false) Integer limit,
+                   @RequestParam(name="searchStr", required = false) String searchStr,
+                   Model model){
         if(page == null)
             page = Paging.PAGE_DEFAULT;
         if(limit == null)
             limit = Paging.LIMIT_FILM;
         model.addAttribute("page",page);
         model.addAttribute("limit", limit);
-        return "/views/web/home";
+        if ("".equals(searchStr) || searchStr == null)
+            return "/views/web/home";
+        model.addAttribute("searchStr", searchStr);
+        return "/views/web/search";
+    }
+
+    @GetMapping(value = {"/genre/{id}"})
+    String getFilmByGenre(@RequestParam(name="page", required = false) Integer page,
+                   @RequestParam(name="limit", required = false) Integer limit, Model model,
+                   @PathVariable Long id){
+        if(page == null)
+            page = Paging.PAGE_DEFAULT;
+        if(limit == null)
+            limit = Paging.LIMIT_FILM;
+        model.addAttribute("page",page);
+        model.addAttribute("limit", limit);
+        model.addAttribute("id", id);
+        return "/views/web/genre";
     }
 
     @GetMapping("/{id}")
