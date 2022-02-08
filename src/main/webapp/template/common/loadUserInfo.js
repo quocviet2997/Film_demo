@@ -7,12 +7,12 @@ function loadUserInfo(){
                 <a class="nav-link">Welcome, `+name+`</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="`+url+`/login" onclick="logout()">Thoát</a>
+                <a class="nav-link" href="`+url+`/login" onclick="logout()">Logout</a>
               </li>`;
     }
     else {
       temp = `<li class="nav-item">
-                <a class="nav-link" href="`+url+`/login">Đăng nhập</a>
+                <a class="nav-link" href="`+url+`/login">Login</a>
               </li>`;
     }
     $('#navbarResponsive>ul').append(temp);

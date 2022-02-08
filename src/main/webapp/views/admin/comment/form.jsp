@@ -19,7 +19,7 @@
         <div class="card">
             <div class="card-body">
                 <caption>
-                    <h1 class="text-center">Film Form</h2>
+                    <h1 class="text-center">Comment Form</h2>
                 </caption>
                 <form id="formSubmit">
                     <input type="hidden" name="id" value="<c:out value='${id}' />" id="id"/>

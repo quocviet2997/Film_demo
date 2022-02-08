@@ -142,8 +142,8 @@ public class CommentService implements ICommentService {
             page = Paging.PAGE_DEFAULT;
         }
         Pageable pageable = PageRequest.of(page-1, limit);
-        int totalItem = totalItem();
-        Integer totalPage = (int)Math.ceil((double)totalItem()/limit);
+        long totalItem = commentRepository.count();
+        Integer totalPage = (int)Math.ceil((double)totalItem/limit);
         List<CommentEntity> commentEntities = commentRepository.findAll(pageable).getContent();
         if(commentEntities.size() == 0){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(

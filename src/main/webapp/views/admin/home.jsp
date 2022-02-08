@@ -13,11 +13,13 @@
   <%@ include file="/common/web/admin-header.jsp"%>
 	<div class="row">
     <div class="col-lg-3">
-      <h1 class="my-4">Shop Name</h1>
+      <h1 class="my-4">Home Page</h1>
       <div class="list-group">
         <a href="<c:url value='/admin-api-film'/>" class="list-group-item">List Film</a>
         <a href="<c:url value='/admin-api-comment'/>" class="list-group-item">List Comment</a>
         <a href="<c:url value='/admin-api-user'/>" class="list-group-item">List User</a>
+        <a href="<c:url value='/admin-api-category'/>" class="list-group-item">List Category</a>
+        <a href="<c:url value='/admin-api-category-film'/>" class="list-group-item">List Category_Film</a>
       </div>
     </div>
   </div>

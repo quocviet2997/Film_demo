@@ -71,7 +71,8 @@
       showList(currentPage, limit);
     }
 
-    $('#search').click(function(){
+    $('#search').click(function(event){
+      event.preventDefault();
       var tempStr = "<c:url value='/home?searchStr='/>";
       window.location.href= tempStr + $('#searchInfo').val();
     })

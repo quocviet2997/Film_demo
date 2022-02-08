@@ -128,7 +128,7 @@
                 dataType: 'json',
                 success: function (result) {
                     $('#title').val(result.data.title);
-                    $('#imgContainer').append(`<img class="card-img-top" style="width:80%; height:80%;" src="<c:url value='/resources/images/`+result.data.poster+`' />" alt="`+result.data.title+`">`);
+                    $('#imgContainer').append(`<img class="card-img-top" style="width:40%; height:40%;" src="<c:url value='/resources/images/`+result.data.poster+`' />" alt="`+result.data.title+`">`);
                     $('#year').val(result.data.year);
                     $('#shortDescription').val(result.data.shortDescription);
                     $('#description').val(result.data.description);

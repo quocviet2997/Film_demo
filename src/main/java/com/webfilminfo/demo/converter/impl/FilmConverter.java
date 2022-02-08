@@ -90,6 +90,8 @@ public class FilmConverter implements IFilmConverter {
         if(entity == null || dto == null)
             return null;
         FilmEntity newEntity = modelMapper.map(dto, FilmEntity.class);
+        if(dto.getPoster() == null)
+            newEntity.setPoster(entity.getPoster());
         newEntity.setCreateDate(entity.getCreateDate());
         newEntity.setCreateBy(entity.getCreateBy());
         return newEntity;

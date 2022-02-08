@@ -3,8 +3,46 @@ th {
   color: white;
 }
 
-div.media-body {
+.card-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-img-top {
+  width:250px; 
+  height:350px;
+}
+
+.card-body {
+  margin-top: auto;
+  margin-bottom: auto;
+  padding-top: inherit;
+  padding-bottom: inherit;
   padding-left: 2%;
+  padding-right: 2%;
+  width:250px;
+  height:30px;
+}
+
+li ul.tagGenres{
+  display: inline-block;
+  padding: 0%;
+}
+
+.myContainer {
+  padding-left: 3%;
+  padding-right: 3%;
+}
+
+ul.tagGenres li{
+  display: inline-block;
+  margin: 2px;
+}
+
+ul.tagGenres li a{
+  border: 2px solid black;
+  padding: 2px;
 }
 
 div#carouselExampleIndicators {
@@ -71,29 +109,3 @@ div#carouselExampleIndicators {
   font-weight: bolder;
   margin-right: 5px;
 }
-
-#mega-menu-1{list-style:none;position:relative;padding:0;margin:0;width:100%;height:auto;position:relative;text-transform:uppercase;float:left;font:20px/22px 'UTMCafetaRegular';}
-#mega-menu-1 li ul,
-#mega-menu-1 .sub{display:none;}
-#mega-menu-1 .sub ul{display:block;}
-#mega-menu-1 li{float:left;margin:0;padding:0;}
-#mega-menu-1 li a{float:left;display:block;color:#DBDBDB;padding:11px 15px;margin-top:3px;text-decoration:none;}
-#mega-menu-1 li.mega-hover a,
-#mega-menu-1 li a:hover{background:#418A98;color:#FFF;}
-#mega-menu-1 li .sub-container{position:absolute;max-width:100%;}
-#mega-menu-1 li .sub{background:rgba(25, 25, 25, 0.9);padding:10px;border-bottom-left-radius:3px;border-bottom-right-radius:3px;color:#fff;}
-#mega-menu-1 li .sub .row{width:100%;overflow:hidden;clear:both;margin-right:10px;margin-left:-20px;}
-#mega-menu-1 li .sub li{list-style:none;float:none;width:150px;display:inline-block;}
-#mega-menu-1 li .sub li:hover{background:rgb(39, 39, 39);}
-#mega-menu-1 li .sub li.mega-hdr{float:left;}
-#mega-menu-1 li .sub li.mega-hdr.last{margin-right:0;}
-#mega-menu-1 li .sub a{background:none;color:#fff;padding:7px 10px;display:block;float:none;font:13px/17px Arial, Helvetica, sans-serif;text-transform:none;}
-#mega-menu-1 li .sub li.mega-hdr a.mega-hdr-a{padding:5px 15px;margin-bottom:5px;background:#6B6B6B;text-transform:uppercase;font-weight:bold;}
-#mega-menu-1 li .sub li.mega-hdr a.mega-hdr-a:hover{color:#dacb46 !important;}
-#mega-menu-1 .sub li.mega-hdr li a{padding:4px 5px;}
-#mega-menu-1 .sub li.mega-hdr li a:hover{color:#dacb46;}
-#mega-menu-1 .sub ul li{padding-right:0;}
-#mega-menu-1 li .sub-container.non-mega .sub{padding:10px;}
-#mega-menu-1 li .sub-container.non-mega li{padding:0;width:190px;margin:0;}
-#mega-menu-1 li .sub-container.non-mega li a{padding:7px 5px 7px 22px;}
-#mega-menu-1 li .sub-container.non-mega li a:hover{color:#a32403;background:#efefef;}

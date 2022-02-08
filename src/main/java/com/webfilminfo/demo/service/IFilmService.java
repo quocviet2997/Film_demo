@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface IFilmService {
     FilmDto findById(Long id);
-    ResponseEntity<ResponseObject> findAll();
+    ResponseEntity<ResponseObject> findAll(String searchInfo);
     FilmDto findByName(Long id);
     ResponseEntity<ResponseObject> findAll(Integer page, Integer limit, String searchInfo);
     ResponseEntity<ResponseObject> findAll(Long id, Integer page, Integer limit);

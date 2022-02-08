@@ -31,8 +31,9 @@
           </div>
           <button type="submit" class="btn btn-default" onclick="postComment(event)">Send</button>
         </form>
+        <h5 style="color:red; text-align:center;" id="commentNotification"></h5>
         <br/>
-        <div class="row" id="listComments">
+        <div class="container-fluid" id="listComments">
         </div>
       </div>
     </div>
@@ -60,46 +61,55 @@
         method: 'get',
         contentType: 'application/json',
         success: function (result) {
-          const filmDetail = `<div class="col-md-3">
-                                <img class="img-fluid" src="<c:url value='/resources/images/`+result.data.poster+`' />" alt="`+result.data.title+`">
-                                <h3 class="my-3">Film Details</h3>
+          const filmDetail = `<div class="row">
+                                <div class="col-md-3">
+                                  <img class="img-fluid" src="<c:url value='/resources/images/`+result.data.poster+`' />" alt="`+result.data.title+`">
+                                  <h3 class="my-3">Film Details</h3>
+                                </div>
+                                <div class="col-md-9">
+                                  <h3 class="my-3">Film Description</h3>
+                                  <p>`+result.data.description+`</p>
+                                </div>
+                              </div>
+                              <div class="row">
                                 <ul>
                                   <li>Year: `+result.data.year+`</li>
-                                  <li>Genre: `+result.data.genre+`</li>
+                                  <li>Genre: 
+                                    <ul class="tagGenres" id="genres">
+                                    </ul>
+                                  </li>
                                   <li>IMDB: `+result.data.avgVote+`</li>
                                 </ul>
-                              </div>
-                              <div class="col-md-9">
-                                <h3 class="my-3">Film Description</h3>
-                                <p>`+result.data.description+`</p>
                               </div>`;
           $('#filmTitle').append(result.data.title);
           $('#filmDetail').append(filmDetail);
+          $.each(result.data.genre, (index, row)=> {
+            var genres = `<li><a href="<c:url value='/genre/`+row.id+`'/>">`+row.categoryName+`</a></li>`;
+            $('#genres').append(genres);
+          });
           $.each(result.data.comments, (index, row) => {
-						const commentFill = `<div class="container-fluid">
-                                    <div class="media">
-                                      <div class="media-heading">
-                                        <h5><span class="label label-info" style="font-weight:bold">`+row.userName+`</span></h5>
-                                      </div>
+						const commentFill = `<div class="media">
+                                    <div class="media-heading">
+                                      <h5><span class="label label-info" style="font-weight:bold">`+row.userName+`</span></h5>
+                                    </div>
 
-                                      <div class="media-body">
-                                        <p>`+row.comment+`</p>
-                                        <div class="comment-meta">
-                                          <span>
-                                            <a class="" role="button" data-toggle="collapse" href="#replyComment_`+index+`" aria-expanded="false" aria-controls="collapseExample">reply</a>
-                                          </span>
-                                          <div class="collapse" id="replyComment_`+index+`">
-                                            <p hidden id="replyid">`+row.id+`</p>
-                                            <form>
-                                              <div class="form-group">
-                                                <label for="comment">Your Comment</label>
-                                                <textarea name="comment" id="comment_`+index+`" class="form-control" rows="3"></textarea>
-                                              </div>
-                                              <button type="submit" class="btn btn-default" onclick="postComment(event, '`+index+`')">Send</button>
-                                            </form>
-                                          </div>
-                                        </div>`+childComments(row.childComments, index)+`
-                                      </div>
+                                    <div class="media-body">
+                                      <p>`+row.comment+`</p>
+                                      <div class="comment-meta">
+                                        <span>
+                                          <a class="" role="button" data-toggle="collapse" href="#replyComment_`+index+`" aria-expanded="false" aria-controls="collapseExample">reply</a>
+                                        </span>
+                                        <div class="collapse" id="replyComment_`+index+`">
+                                          <p hidden id="replyid">`+row.id+`</p>
+                                          <form>
+                                            <div class="form-group">
+                                              <label for="comment">Your Comment</label>
+                                              <textarea name="comment" id="comment_`+index+`" class="form-control" rows="3"></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-default" onclick="postComment(event, '`+index+`')">Send</button>
+                                          </form>
+                                        </div>
+                                      </div>`+childComments(row.childComments, index)+`
                                     </div>
                                   </div>`;
 						$('#listComments').append(commentFill);
@@ -143,6 +153,7 @@
     }
 
     function postComment(e, subStr) {
+      e.preventDefault();
       var reply_id = null;
       var comment = null;
       if(typeof subStr == 'undefined'){
@@ -156,12 +167,21 @@
       }
       var film_id = $('#id').text();
       var user_id = localStorage.getItem("userId");
-      var data = {};
-      data["filmId"] = film_id;
-      data["userId"] = user_id;
-      data["replyId"] = reply_id;
-      data["comment"] = comment;
-      addComment(data);
+      if(user_id == null){
+        $('#commentNotification').empty();
+        $('#commentNotification').text('Please login to comment!!!');
+        $('#comment').val('');
+        return;
+      }
+      else{
+        var data = {};
+        data["filmId"] = film_id;
+        data["userId"] = user_id;
+        data["replyId"] = reply_id;
+        data["comment"] = comment;
+        addComment(data);
+        $('#comment').empty();
+      }
     }
 
     function showListGenre() {
@@ -189,7 +209,7 @@
           data: JSON.stringify(data),
           dataType: 'json',
           success: function (result) {
-              window.location.href = "<c:url value='/admin-api-comment'/>";
+              window.location.reload();
           },
           error: function (error) {
               alert("Insert failed");

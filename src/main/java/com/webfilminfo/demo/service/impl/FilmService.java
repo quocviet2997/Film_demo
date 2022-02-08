@@ -48,8 +48,15 @@ public class FilmService implements IFilmService {
     }
 
     @Override
-    public ResponseEntity<ResponseObject> findAll() {
-        List<FilmEntity> entities = filmRepository.findAll();
+    public ResponseEntity<ResponseObject> findAll(String searchInfo) {
+        List<FilmEntity> entities = new ArrayList<>();
+        if("".equals(searchInfo) || searchInfo == null) {
+            entities = filmRepository.findAll();
+        }
+        else
+        {
+            entities = filmRepository.findByTitleContainingIgnoreCase(searchInfo);
+        }
         List<FilmDto> dtos = new ArrayList<>();
         for(FilmEntity entity:entities){
             dtos.add(filmConverter.entiFilmToDto(entity));
@@ -72,7 +79,7 @@ public class FilmService implements IFilmService {
     @Override
     public ResponseEntity<ResponseObject> findAll(Integer page, Integer limit, String searchInfo) {
         if(page == null && limit == null)
-            return findAll();
+            return findAll(searchInfo);
         if(limit == null){
             limit = Paging.LIMIT_FILM;
         }
@@ -185,8 +192,8 @@ public class FilmService implements IFilmService {
             entity = filmRepository.findById(tempId).orElse(null);
             if(entity != null){
                 entity = filmConverter.dtoFilmToEntity(entity, filmDto);
-                entity.setPoster(tempStr);
-                entity.setStatus(0);
+                if(tempStr != null)
+                    entity.setPoster(tempStr);
                 entity = filmRepository.save(entity);
             }
             return (entity!= null) ?

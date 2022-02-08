@@ -110,6 +110,7 @@ public class UserService implements IUserService {
             entity = userRepository.findById(id).orElse(null);
             if(entity != null){
                 entity = userConverter.dtoUserToEntity(entity ,userDto);
+                entity.setPassword(passwordEncoder.encode(entity.getPassword()));
                 UserEntity temp = userRepository.save(entity);
             }
             return (entity==null)?
